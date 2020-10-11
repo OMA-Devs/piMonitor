@@ -27,7 +27,7 @@ class SpeedController():
 		self.OUTpin = OUTpin
 		gpio.setup(self.OUTpin, gpio.OUT)
 		self.speed = 0
-		self.pwm = gpio.PWM(self.OUTpin, 100) #100 es la frecuencia en HERTZIOS
+		self.pwm = gpio.PWM(self.OUTpin, 5) #100 es la frecuencia en HERTZIOS
 		self.pwm.start(0)
 		self.log.warning("SPEED CONTROLLER STARTED")
 	def setSpeed(self, duty):
@@ -41,9 +41,34 @@ class SpeedController():
 		#self.log.info("N: "+str(n))
 		z = round((act-min)/n)
 		self.log.info("setSpeedMAP()- MAPPED SPEED TO: "+str(z))
-		self.setSpeed(z)
+		##Manejo de posibles CICLOS menores a 0
+		if z < 0:
+			self.setSpeed(0)
+		elif z > 100:
+			self.setSpeed(100)
+		else:
+			self.setSpeed(z)
 	def clearController(self):
 		'''Destrucción del objeto y liberación de los GPIO correspondientes.'''
 		self.pwm.stop()
 		gpio.cleanup()
 		self.log.warning("clearController()- SPEED CONTROLLER INHABILITED")
+
+if __name__ == "__main__":
+	ctrl = SpeedController(12)
+	while True:
+		try:
+			spd = int(input())
+			ctrl.setSpeed(spd)
+		except KeyboardInterrupt:
+			ctrl.clearController()
+			ctrl.log.warning("INVALID SPEED. SHUTTING OFF")
+			break
+		except ValueError:
+			ctrl.clearController()
+			ctrl.log.warning("INVALID SPEED. SHUTTING OFF")
+			break
+		except EOFError:
+			ctrl.clearController()
+			ctrl.log.warning("INVALID SPEED. SHUTTING OFF")
+			break

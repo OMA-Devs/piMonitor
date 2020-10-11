@@ -1,0 +1,4 @@
+.vscode/settings.json
+SpeedController.log
+GUI.log
+__pycache__/SpeedController.cpython-37.pyc
