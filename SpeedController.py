@@ -24,16 +24,16 @@ class SpeedController():
 		'''Clase generica para instanciar un generador de PWM asociado a un pin de salida.
 		Diseñada con el control de un transistor 2n2222 en mente, pero sirve para cualquier
 		otro tipo de control PWM con pocas o ninguna modificación.'''
-		self.OUTpin = OUTpin
-		gpio.setup(self.OUTpin, gpio.OUT)
+		#self.OUTpin = OUTpin
+		#gpio.setup(self.OUTpin, gpio.OUT)
 		self.speed = 0
-		self.pwm = gpio.PWM(self.OUTpin, 5) #100 es la frecuencia en HERTZIOS
-		self.pwm.start(0)
+		#self.pwm = gpio.PWM(self.OUTpin, 5) #100 es la frecuencia en HERTZIOS
+		#self.pwm.start(0)
 		self.log.warning("SPEED CONTROLLER STARTED")
 	def setSpeed(self, duty):
 		'''Determina el ciclo de trabajo PWM'''
-		self.pwm.ChangeDutyCycle(duty)
-		self.speed = duty
+		#self.pwm.ChangeDutyCycle(duty)
+		#self.speed = duty
 		self.log.info("setSpeed()- SPEED SET TO: "+str(duty))
 	def setSpeedMAP(self, min, max, act):
 		'''Mapea una velocidad de 0-100 dado un par MIN-MAX y una variable ACT(ual)'''
@@ -50,8 +50,8 @@ class SpeedController():
 			self.setSpeed(z)
 	def clearController(self):
 		'''Destrucción del objeto y liberación de los GPIO correspondientes.'''
-		self.pwm.stop()
-		gpio.cleanup()
+		#self.pwm.stop()
+		#gpio.cleanup()
 		self.log.warning("clearController()- SPEED CONTROLLER INHABILITED")
 
 if __name__ == "__main__":
